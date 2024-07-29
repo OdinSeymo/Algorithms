@@ -9,6 +9,8 @@ int charAt(const string &s, int d) {
     else return -127;
 }
 
+// hi-hi
+
 void MSDsort(vector<string> &a, int low, int high, int d, vector<string> &aux) {
     if (high <= low) return;
     
