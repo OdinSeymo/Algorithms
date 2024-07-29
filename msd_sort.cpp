@@ -3,42 +3,35 @@
 #include <string>
 using namespace std;
 
-// Функция для получения символа в строке по индексу, если индекс за пределами строки - возвращаем -1
 int charAt(const string &s, int d) {
     if (d < s.length()) return s[d];
     else return -1;
 }
 
-// Функция MSD сортировки
 void MSDsort(vector<string> &a, int low, int high, int d, vector<string> &aux) {
     if (high <= low) return;
     
-    const int R = 256;  // размер алфавита (для ASCII символов)
+    const int R = 256;  // Размер алфавита (для ASCII символов)
     vector<int> count(R + 2, 0);
     
-    // Подсчитываем количество символов
     for (int i = low; i <= high; i++) {
         int c = charAt(a[i], d);
         count[c + 2]++;
     }
     
-    // Преобразуем count в индексы
     for (int r = 0; r < R + 1; r++) {
         count[r + 1] += count[r];
     }
     
-    // Распределяем элементы
     for (int i = low; i <= high; i++) {
         int c = charAt(a[i], d);
         aux[count[c + 1]++] = a[i];
     }
     
-    // Копируем обратно
     for (int i = low; i <= high; i++) {
         a[i] = aux[i - low];
     }
     
-    // Рекурсивно сортируем подмассивы
     for (int r = 0; r < R; r++) {
         MSDsort(a, low + count[r], low + count[r + 1] - 1, d + 1, aux);
     }
@@ -50,12 +43,40 @@ void MSDsort(vector<string> &a) {
     MSDsort(a, 0, n - 1, 0, aux);
 }
 
-int main() {
-    vector<string> data = {"dab", "cab", "lab", "dab", "lab", "cab", "dab"};
+void runTest(const vector<string> &testData) {
+    vector<string> data = testData;
     MSDsort(data);
     for (const auto &str : data) {
         cout << str << endl;
     }
-    return 0;
+    cout << "------" << endl;
 }
 
+int main() {
+    // Тест 1
+    cout << "Тест 1:" << endl;
+    vector<string> testData1 = {"dab", "cab", "lab", "dab", "lab", "cab", "dab"};
+    runTest(testData1);
+
+    // Тест 2
+    cout << "Тест 2:" << endl;
+    vector<string> testData2 = {"apple", "banana", "grape", "cherry", "mango", "peach", "berry"};
+    runTest(testData2);
+
+    // Тест 3
+    cout << "Тест 3:" << endl;
+    vector<string> testData3 = {"123", "321", "213", "132", "231", "312"};
+    runTest(testData3);
+
+    // Тест 4
+    cout << "Тест 4:" << endl;
+    vector<string> testData4 = {"a", "ab", "abc", "abcd", "abcde"};
+    runTest(testData4);
+
+    // Тест 5
+    cout << "Тест 5:" << endl;
+    vector<string> testData5 = {"xyz", "wxyz", "vwxyz", "uvwxyz"};
+    runTest(testData5);
+
+    return 0;
+}
